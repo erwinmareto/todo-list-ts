@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  PENDING
+  STARTED
+  DONE
+}
+
+enum Priority {
+  MINOR
+  MODERATE
+  URGENT
+}
+
+model User {
+  id        Int        @id @unique @default(autoincrement())
+  username  String     @db.VarChar(255) @unique
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
+  Category  Category[]
+}
+
+model Category {
+  id        Int      @id @unique @default(autoincrement())
+  userId    Int
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  user User   @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  Task Task[]
+}
+
+model Task {
+  id         Int      @id @unique @default(autoincrement())
+  categoryId Int
+  title      String
+  status     Status
+  priority   Priority
+  dueTime    DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
