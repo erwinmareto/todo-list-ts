@@ -5,6 +5,7 @@ interface ModalProps {
   title: string;
   children: React.ReactNode;
 }
+// TODO: change props to destructure
 const Modal = (props: ModalProps) => {
   return (
     <section>

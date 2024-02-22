@@ -1,5 +1,4 @@
 import TodosPage from "@/components/pages/Todos";
-import Image from "next/image";
 
 export default function Home() {
   return (
