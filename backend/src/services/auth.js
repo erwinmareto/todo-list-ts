@@ -12,7 +12,7 @@ class AuthService {
       },
     });
     if (exist) {
-      throw {name: "UniqueName"};
+      throw { name: "UniqueName" };
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await prisma.user.create({
@@ -25,7 +25,7 @@ class AuthService {
   };
 
   static login = async ({ username, password }) => {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
         username: username,
       },
@@ -42,11 +42,13 @@ class AuthService {
     }
 
     const userData = {
-        id: user.id,
-        username: user.username
-    }
-    const accessToken = generateToken(userData)
-      
+      id: user.id,
+      username: user.username,
+    };
+
+    const accessToken = generateToken(userData);
+
+    return { accessToken, ...userData };
   };
 }
 
