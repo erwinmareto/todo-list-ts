@@ -1,5 +1,6 @@
 import NewCategory from "@/components/parts/Add/NewCategory";
 import CategoryCard from "@/components/parts/Category";
+import { Category } from "./types";
 
 const TodosPage = ({ categories }: { categories: Category[] }) => {
   return (

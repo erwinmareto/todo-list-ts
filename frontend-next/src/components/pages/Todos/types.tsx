@@ -1,4 +1,4 @@
-type Category = {
+export type Category = {
   id: number;
   userId: number;
   title: string;
@@ -7,10 +7,10 @@ type Category = {
   Task: Task[];
 };
 
-type Status = "PENDING" | "STARTED" | "DONE";
-type Priority = "MINOR" | "MODERATE" | "URGENT";
+export type Status = "PENDING" | "STARTED" | "DONE";
+export type Priority = "MINOR" | "MODERATE" | "URGENT";
 
-type Task = {
+export type Task = {
   id: number;
   categoryId: number;
   title: string;

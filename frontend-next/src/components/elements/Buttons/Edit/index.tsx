@@ -1,6 +1,6 @@
-const EditButton = () => {
+const EditButton = ({open}: {open: () => void}) => {
   return (
-    <button className="bg-blue-500 p-1 rounded-md hover:bg-blue-300 transition-all">
+    <button onClick={open} className="bg-blue-500 p-1 rounded-md hover:bg-blue-300 transition-all">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"

@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 import Task from "@/components/parts/Task";
 import NewTask from "@/components/parts/Add/NewTask";
 import CategoryForm from "@/components/elements/Forms/Category";
 import Modal from "@/components/elements/Modal";
 import { deleteCategory } from "@/queries/category";
-import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
+import { Category } from "@/components/pages/Todos/types";
 
 const CategoryCard = ({ category }: { category: Category }) => {
   const router = useRouter();
@@ -84,12 +85,13 @@ const CategoryCard = ({ category }: { category: Category }) => {
           </section>
           {open && (
             <>
-              <Task />
-              <Task />
-              <Task />
+              {category?.Task?.map((task) => (
+                <Task key={task.id} task={task} />
+              ))}
+
+              <NewTask categoryId={category?.id} />
             </>
           )}
-          <NewTask />
         </div>
       </article>
       {modal && (

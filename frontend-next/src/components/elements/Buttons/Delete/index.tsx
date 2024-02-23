@@ -1,6 +1,6 @@
-const DeleteButton = () => {
+const DeleteButton = ({deleteTask}: {deleteTask: () => void}) => {
   return (
-    <button className="bg-red-500 p-1 rounded-md hover:bg-red-300 transition-all">
+    <button onClick={deleteTask} className="bg-red-500 p-1 rounded-md hover:bg-red-300 transition-all">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"

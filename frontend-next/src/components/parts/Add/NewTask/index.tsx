@@ -4,7 +4,7 @@ import TaskForm from "@/components/elements/Forms/Task";
 import Modal from "@/components/elements/Modal";
 import { useState } from "react";
 
-const NewTask = () => {
+const NewTask = ({ categoryId }: { categoryId: number }) => {
   const [open, setOpen] = useState(false);
   const changeOpen = () => {
     setOpen(!open);
@@ -19,7 +19,7 @@ const NewTask = () => {
       </article>
       {open && (
         <Modal close={changeOpen} title="Add Task">
-          <TaskForm />
+          <TaskForm close={changeOpen} categoryId={categoryId} />
         </Modal>
       )}
     </>
