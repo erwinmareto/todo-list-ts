@@ -21,18 +21,20 @@ class TaskService {
   };
 
   static createTask = async ({ payload }) => {
+    const time = new Date(payload.dueTime);
     await prisma.task.create({
       data: {
         categoryId: +payload.categoryId,
         title: payload.title,
         status: payload.status,
         priority: payload.priority,
-        dueTime: payload.dueTime,
+        dueTime: time.toISOString(),
       },
     });
   };
 
   static updateTask = async ({ taskId, payload }) => {
+    const time = new Date(payload.dueTime);
     const task = await prisma.task.update({
       where: { id: +taskId },
       data: {
@@ -40,7 +42,7 @@ class TaskService {
         title: payload.title,
         status: payload.status,
         priority: payload.priority,
-        dueTime: payload.dueTime,
+        dueTime: time.toISOString(),
       },
     });
     if (!task) {
