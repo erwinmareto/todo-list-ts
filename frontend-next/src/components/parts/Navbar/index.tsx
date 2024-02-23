@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { deleteCookie, getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import { deleteCookie } from "cookies-next";
 
 const Navbar = ({ token }: { token?: RequestCookie }) => {
-  // const token = getCookie("token");
+  const router = useRouter();
   const logout = () => {
     deleteCookie("token");
     deleteCookie("userId");
+    router.push("/auth/login");
   };
   return (
     <nav className="flex justify-between w-full p-5 bg-slate-500">
