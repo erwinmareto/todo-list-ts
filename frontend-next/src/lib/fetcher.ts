@@ -11,7 +11,7 @@ interface Request {
     body?: string;
 }
 
-const fetcher = async (url: string, method: methods, reqData: Record<string, unknown>) => {
+const fetcher = async (url: string, method: methods, reqData?: Record<string, unknown>) => {
   const finalUrl = `${process.env.NEXT_PUBLIC_BASE_URL}${url}`;
   const request: Request =
     method === "GET"
