@@ -1,10 +1,12 @@
 import NewCategory from "@/components/parts/Add/NewCategory";
-import CatgeoryCard from "@/components/parts/Category";
+import CategoryCard from "@/components/parts/Category";
 
-const TodosPage = () => {
+const TodosPage = ({ categories }: { categories: Category[] }) => {
   return (
     <section className="flex flex-col gap-5 w-full">
-      <CatgeoryCard />
+      {categories.map((category) => (
+        <CategoryCard key={category.id} category={category} />
+      ))}
       <NewCategory />
     </section>
   );

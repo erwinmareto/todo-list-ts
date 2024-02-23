@@ -19,7 +19,7 @@ const NewCategory = () => {
       </article>
       {open && (
         <Modal close={changeOpen} title="Add Category">
-          <CategoryForm />
+          <CategoryForm close={changeOpen} />
         </Modal>
       )}
     </>

@@ -1,50 +1,104 @@
 "use client";
 
 import { useState } from "react";
-import Task from "../Task";
-import NewTask from "../Add/NewTask";
+import Task from "@/components/parts/Task";
+import NewTask from "@/components/parts/Add/NewTask";
+import CategoryForm from "@/components/elements/Forms/Category";
+import Modal from "@/components/elements/Modal";
+import { deleteCategory } from "@/queries/category";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
-const CatgeoryCard = () => {
+const CategoryCard = ({ category }: { category: Category }) => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [modal, setModal] = useState(false);
   const changeOpen = () => {
     setOpen(!open);
   };
+  const changeModal = () => {
+    setModal(!modal);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const deleted = await deleteCategory(category.id);
+      Swal.fire({
+        title: "Success!",
+        text: deleted.message,
+        icon: "success",
+        timer: 2000,
+        showCloseButton: false,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+      router.refresh();
+    } catch (error: any) {
+      Swal.fire({
+        title: "Error!",
+        text: error.message,
+        icon: "error",
+        timer: 2000,
+        showCloseButton: false,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+    }
+  };
   return (
-    <article className="bg-purple-500 w-full rounded-xl">
-      <div className="flex justify-end gap-3 px-3 m-1">
-        <button className="w-3 h-3 bg-red-500 rounded-full transition-all hover:bg-red-300" />
-        <button className="w-3 h-3 bg-yellow-500 rounded-full transition-all hover:bg-yellow-300" />
-        <button className="w-3 h-3 bg-green-500 rounded-full transition-all hover:bg-green-300" />
-      </div>
-      <div className="bg-fuchsia-400 flex flex-col justify-center gap-5 p-10 rounded-xl">
-        <section className="flex justify-between">
-          <h1 className="text-3xl">Todos</h1>
-          <button onClick={changeOpen}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className={`w-10 h-10 transition-all duration-300 ${open && "rotate-180"}`}
-            >
-              <path
-                fillRule="evenodd"
-                d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-        </section>
-        {open && (
-          <>
-            <Task />
-            <Task />
-            <Task />
-          </>
-        )}
-        <NewTask />
-      </div>
-    </article>
+    <>
+      <article className="bg-purple-500 w-full rounded-xl">
+        <div className="flex justify-end gap-3 px-3 m-1">
+          <button
+            onClick={handleDelete}
+            className="w-3 h-3 bg-red-500 rounded-full transition-all hover:bg-red-300"
+          />
+          <button
+            onClick={changeModal}
+            className="w-3 h-3 bg-yellow-500 rounded-full transition-all hover:bg-yellow-300"
+          />
+          <button
+            onClick={changeOpen}
+            className="w-3 h-3 bg-green-500 rounded-full transition-all hover:bg-green-300"
+          />
+        </div>
+        <div className="bg-fuchsia-400 flex flex-col justify-center gap-5 p-10 rounded-xl">
+          <section className="flex justify-between">
+            <h1 className="text-3xl">{category?.title}</h1>
+            <button onClick={changeOpen}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className={`w-10 h-10 transition-all duration-300 ${
+                  open && "rotate-180"
+                }`}
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </section>
+          {open && (
+            <>
+              <Task />
+              <Task />
+              <Task />
+            </>
+          )}
+          <NewTask />
+        </div>
+      </article>
+      {modal && (
+        <Modal close={changeModal} title="Edit Category">
+          <CategoryForm close={changeModal} prevCategory={category} />
+        </Modal>
+      )}
+    </>
   );
 };
 
-export default CatgeoryCard;
+export default CategoryCard;
