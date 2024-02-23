@@ -57,14 +57,16 @@ class taskController {
 
   static getEverything = async (req, res, next) => {
     try {
-      const {id} = req.params;
+      const { id } = req.params;
       // const {id} = req.user
-      const tasks = await TaskService.getEverythingById(+id)
-      return res.status(200).json({message: 'Task Retrieved Successfully', data:tasks})
+      const tasks = await TaskService.getEverythingById(+id);
+      return res
+        .status(200)
+        .json({ message: "Task Retrieved Successfully", data: tasks });
     } catch (err) {
-      next(err)
+      next(err);
     }
-  }
+  };
 }
 
 module.exports = taskController;

@@ -20,6 +20,21 @@ class CategoryService {
     return category;
   };
 
+  static getCategoriesByUserId = async (userId) => {
+    const categories = await prisma.category.findMany({
+      where: {
+        userId: parseInt(userId),
+      },
+      include: {
+        Task: true,
+      }
+    });
+    if (!categories) {
+      throw { name: "NotFound" };
+    }
+    return categories;
+  };
+
   static createCategory = async ({ userId, title }) => {
     await prisma.category.create({
       data: {
