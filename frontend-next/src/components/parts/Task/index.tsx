@@ -10,17 +10,23 @@ import { Task } from "@/components/pages/Todos/types";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { deleteTask } from "@/queries/task";
+import ConfirmModal from "@/components/elements/Modal/Confirm";
 
 const Task = ({ task }: { task: Task }) => {
   const router = useRouter()
   const [open, setOpen] = useState(false);
   const [modal, setModal] = useState(false);
+  const [confirm, setConfirm] = useState(false);
   const changeOpen = () => {
     setOpen(!open);
   };
   const changeModal = () => {
     setModal(!modal);
   };
+
+  const changeConfirm = () => {
+    setConfirm(!confirm);
+  }
   const stopPropagation = (e: React.MouseEvent<HTMLInputElement>) => {
     e.stopPropagation();
   };
@@ -82,7 +88,7 @@ const Task = ({ task }: { task: Task }) => {
           <section onClick={stopPropagation}>
             <div className="flex justify-between">
               <EditButton open={changeModal} />
-              <DeleteButton deleteTask={handleDelete} />
+              <DeleteButton deleteTask={changeConfirm} />
             </div>
             <p className="text-md">{moment(task?.dueTime).fromNow()}</p>
           </section>
@@ -92,6 +98,9 @@ const Task = ({ task }: { task: Task }) => {
         <Modal close={changeModal} title="Edit Task">
           <TaskForm close={changeModal} categoryId={task?.categoryId} prevTask={task} />
         </Modal>
+      )}
+      {confirm && (
+        <ConfirmModal close={changeConfirm} handleDelete={handleDelete} name={task?.title} />
       )}
     </>
   );

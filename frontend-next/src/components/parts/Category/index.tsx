@@ -9,17 +9,22 @@ import CategoryForm from "@/components/elements/Forms/Category";
 import Modal from "@/components/elements/Modal";
 import { deleteCategory } from "@/queries/category";
 import { Category } from "@/components/pages/Todos/types";
+import ConfirmModal from "@/components/elements/Modal/Confirm";
 
 const CategoryCard = ({ category }: { category: Category }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [modal, setModal] = useState(false);
+  const [confirm, setConfirm] = useState(false);
   const changeOpen = () => {
     setOpen(!open);
   };
   const changeModal = () => {
     setModal(!modal);
   };
+  const changeConfirm = () => {
+    setConfirm(!confirm);
+  }
 
   const handleDelete = async () => {
     try {
@@ -51,7 +56,7 @@ const CategoryCard = ({ category }: { category: Category }) => {
       <article className="bg-purple-500 w-full rounded-xl">
         <div className="flex justify-end gap-3 px-3 m-1">
           <button
-            onClick={handleDelete}
+            onClick={changeConfirm}
             className="w-3 h-3 bg-red-500 rounded-full transition-all hover:bg-red-300"
           />
           <button
@@ -98,6 +103,9 @@ const CategoryCard = ({ category }: { category: Category }) => {
         <Modal close={changeModal} title="Edit Category">
           <CategoryForm close={changeModal} prevCategory={category} />
         </Modal>
+      )}
+      {confirm && (
+        <ConfirmModal close={changeConfirm} handleDelete={handleDelete} name={category?.title} />
       )}
     </>
   );
