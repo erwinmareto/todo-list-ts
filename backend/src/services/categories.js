@@ -11,7 +11,7 @@ class CategoryService {
   static getOneCategory = async ({ categoryId }) => {
     const category = await prisma.category.findUnique({
       where: {
-        id: categoryId,
+        id: +categoryId,
       },
     });
     if (!category) {
@@ -46,9 +46,9 @@ class CategoryService {
 
   static updateCategory = async ({ categoryId, payload }) => {
     const user = await prisma.category.update({
-      where: { id: categoryId },
+      where: { id: +categoryId },
       data: {
-        userId: payload.userId,
+        userId: +payload.userId,
         title: payload.title,
       },
     });
@@ -60,7 +60,7 @@ class CategoryService {
 
   static deleteCategory = async ({ categoryId }) => {
     const user = await prisma.category.delete({
-      where: { id: categoryId },
+      where: { id: +categoryId },
     });
     if (!user) {
       throw { name: "NotFound" };

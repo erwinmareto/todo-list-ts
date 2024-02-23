@@ -11,7 +11,7 @@ class TaskService {
   static getOneTask = async ({ taskId }) => {
     const task = await prisma.task.findUnique({
       where: {
-        id: taskId,
+        id: +taskId,
       },
     });
     if (!task) {
@@ -23,7 +23,7 @@ class TaskService {
   static createTask = async ({ payload }) => {
     await prisma.task.create({
       data: {
-        categoryId: payload.categoryId,
+        categoryId: +payload.categoryId,
         title: payload.title,
         status: payload.status,
         priority: payload.priority,
@@ -34,9 +34,9 @@ class TaskService {
 
   static updateTask = async ({ taskId, payload }) => {
     const task = await prisma.task.update({
-      where: { id: taskId },
+      where: { id: +taskId },
       data: {
-        categoryId: payload.categoryId,
+        categoryId: +payload.categoryId,
         title: payload.title,
         status: payload.status,
         priority: payload.priority,
@@ -51,7 +51,7 @@ class TaskService {
 
   static deleteTask = async ({ taskId }) => {
     const task = await prisma.task.delete({
-      where: { id: taskId },
+      where: { id: +taskId },
     });
     if (!task) {
       throw { name: "NotFound" };

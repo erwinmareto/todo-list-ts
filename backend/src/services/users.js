@@ -11,7 +11,7 @@ class UserService {
   static getUserById = async (id) => {
     const user = await prisma.user.findUnique({
       where: {
-        id: id,
+        id: +id,
       },
     });
     if (!user) {
@@ -23,7 +23,7 @@ class UserService {
   static updateUser = async ({ userId, payload }) => {
     const hashedPassword = await bcrypt.hash(payload.password, 10);
     const user = await prisma.user.update({
-      where: { id: userId },
+      where: { id: +userId },
       data: {
         username: payload.username,
         password: hashedPassword,
@@ -37,7 +37,7 @@ class UserService {
 
   static deleteUser = async ({ userId }) => {
     const user = await prisma.user.delete({
-      where: { id: userId },
+      where: { id: +userId },
     });
     if (!user) {
       throw { name: "NotFound" };
@@ -47,7 +47,7 @@ class UserService {
   static getEverything = async ({ userId }) => {
     const userTasks = await prisma.user.findUnique({
       where: {
-        id: userId,
+        id: +userId,
       },
       select: {
         Category: {
