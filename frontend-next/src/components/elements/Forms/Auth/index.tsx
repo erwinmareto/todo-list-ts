@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
-import Swal from 'sweetalert2'
+import { setCookie } from "cookies-next";
+import Swal from "sweetalert2";
 import { loginUser, registerUser } from "@/queries/auth";
-import { AuthPayload, AuthFormProps } from "./type";
+import { AuthPayload, AuthFormProps } from "./types";
 
 const AuthForm = ({ authType }: AuthFormProps) => {
   const router = useRouter();
@@ -16,29 +17,41 @@ const AuthForm = ({ authType }: AuthFormProps) => {
   } = useForm<AuthPayload>();
   const onSubmit: SubmitHandler<AuthPayload> = async (data) => {
     try {
-        const userData = authType === "register" ? await registerUser(data) : await loginUser(data)
-          Swal.fire({
-            title: 'Success!',
-            text: userData.message,
-            icon: 'success',
-            timer: 2000,
-            showCloseButton: false,
-            showConfirmButton: false,
-            timerProgressBar: true
-          })
-          authType === "register" ? router.push("/auth/login") : router.push("/")
-    } catch (error: any) {
-        Swal.fire({
-            title: 'Error!',
-            text: error.message,
-            icon: 'error',
-            timer: 2000,
-            showCloseButton: false,
-            showConfirmButton: false,
-            timerProgressBar: true
-          })
+      const userData =
+        authType === "register"
+          ? await registerUser(data)
+          : await loginUser(data);
+      Swal.fire({
+        title: "Success!",
+        text: userData.message,
+        icon: "success",
+        timer: 2000,
+        showCloseButton: false,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+      // authType === "register" ? router.push("/auth/login") : router.push("/")
+      switch (authType) {
+        case "register":
+          router.push("/auth/login");
+          break;
+        case "login":
+          setCookie("token", userData.data.accessToken);
+          setCookie("userId", userData.data.id);
+          router.push("/");
+          break;
       }
-    
+    } catch (error: any) {
+      Swal.fire({
+        title: "Error!",
+        text: error.message,
+        icon: "error",
+        timer: 2000,
+        showCloseButton: false,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+    }
   };
   return (
     <>

@@ -1,5 +1,5 @@
 import AuthForm from "@/components/elements/Forms/Auth";
-import { AuthFormProps } from "@/components/elements/Forms/Auth/type";
+import { AuthFormProps } from "@/components/elements/Forms/Auth/types";
 
 const AuthPage = ({ authType }: AuthFormProps) => {
   return (
