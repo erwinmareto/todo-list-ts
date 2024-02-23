@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { deleteCookie, getCookie } from "cookies-next";
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
-const Navbar = ({ token }: { token: string }) => {
+const Navbar = ({ token }: { token?: RequestCookie }) => {
   // const token = getCookie("token");
   const logout = () => {
     deleteCookie("token");
