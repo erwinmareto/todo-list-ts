@@ -11,7 +11,7 @@ const Modal = (props: ModalProps) => {
     <section>
       <div className="fixed z-50 inset-0 p-2 overflow-auto backdrop-blur-sm">
         <div className="flex justify-center items-center min-h-screen">
-          <article className="w-full max-w-lg bg-purple-500 p-10 rounded-lg">
+          <article className="w-full max-w-lg bg-dark-500 bg-opacity-80 shadow-2xl p-10 rounded-lg">
             <div className="flex justify-between mb-5">
               <h1 className="text-3xl">{props.title}</h1>
               <button onClick={props.close}>

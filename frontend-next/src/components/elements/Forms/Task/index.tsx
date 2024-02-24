@@ -109,7 +109,7 @@ const TaskForm = ({ close, categoryId, prevTask }: TaskFormProps) => {
       )}
       <button
         type="submit"
-        className="w-1/4 bg-blue-500 p-2 mx-auto rounded-lg transition-all hover:bg-blue-300"
+        className="w-1/4 text-white bg-blue-500 p-2 mx-auto rounded-lg transition-all hover:bg-blue-300"
       >
         Submit
       </button>

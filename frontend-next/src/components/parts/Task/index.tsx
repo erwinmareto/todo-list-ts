@@ -59,17 +59,17 @@ const Task = ({ task }: { task: Task }) => {
   }
   return (
     <>
-      <article className="bg-pink-500 w-full rounded-full">
+      <article className="bg-light-500 bg-opacity-50 w-full rounded-full">
         {open && (
           <div className="flex justify-end p-1 gap-3 mr-16">
-            <button className="w-3 h-3 bg-red-500 rounded-full transition-all hover:bg-red-300" />
-            <button className="w-3 h-3 bg-yellow-500 rounded-full transition-all hover:bg-yellow-300" />
-            <button className="w-3 h-3 bg-green-500 rounded-full transition-all hover:bg-green-300" />
+            <button onClick={changeConfirm} className="w-3 h-3 bg-red-500 rounded-full transition-all hover:bg-red-300" />
+            <button onClick={changeModal} className="w-3 h-3 bg-yellow-500 rounded-full transition-all hover:bg-yellow-300" />
+            <button onClick={changeOpen} className="w-3 h-3 bg-green-500 rounded-full transition-all hover:bg-green-300" />
           </div>
         )}
         <div
           onClick={changeOpen}
-          className={`flex items-end justify-between w-full bg-purple-500 p-10 rounded-full transition-all `}
+          className={`flex items-end justify-between w-full bg-light-blue-500 bg-opacity-80 p-10 rounded-full transition-all `}
         >
           <section
             onClick={stopPropagation}

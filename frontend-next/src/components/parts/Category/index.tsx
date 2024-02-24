@@ -53,8 +53,8 @@ const CategoryCard = ({ category }: { category: Category }) => {
   };
   return (
     <>
-      <article className="bg-purple-500 w-full rounded-xl">
-        <div className="flex justify-end gap-3 px-3 m-1">
+      <article className="bg-light-500 bg-opacity-50 shadow-xl w-full rounded-xl">
+        <div className="flex justify-start gap-3 p-3 m-1">
           <button
             onClick={changeConfirm}
             className="w-3 h-3 bg-red-500 rounded-full transition-all hover:bg-red-300"
@@ -68,7 +68,7 @@ const CategoryCard = ({ category }: { category: Category }) => {
             className="w-3 h-3 bg-green-500 rounded-full transition-all hover:bg-green-300"
           />
         </div>
-        <div className="bg-fuchsia-400 flex flex-col justify-center gap-5 p-10 rounded-xl">
+        <div className="bg-dark-500 bg-opacity-50 flex flex-col justify-center gap-5 p-10 rounded-xl">
           <section className="flex justify-between">
             <h1 className="text-3xl">{category?.title}</h1>
             <button onClick={changeOpen}>

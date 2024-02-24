@@ -1,4 +1,10 @@
 "use client";
+// HEX: #42a1e3, RGB: (66, 161, 227)
+// HEX: #78dcfb, RGB: (120, 220, 251)
+// HEX: #3c7484, RGB: (60, 116, 132)
+// HEX: #6c8c94, RGB: (108, 140, 148)
+// HEX: #becba8, RGB: (190, 203, 168)
+// HEX: #242c34, RGB: (36, 44, 52)
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";

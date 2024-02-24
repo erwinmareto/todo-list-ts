@@ -13,7 +13,7 @@ const Navbar = ({ token }: { token?: RequestCookie }) => {
     router.push("/auth/login");
   };
   return (
-    <nav className="flex justify-between w-full p-5 bg-slate-500">
+    <nav className="flex justify-between w-full p-5 bg-dark-500 bg-opacity-80">
       <Link href="/">
         <h1 className="text-3xl">Todo App</h1>
       </Link>
