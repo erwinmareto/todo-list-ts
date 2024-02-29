@@ -6,6 +6,7 @@
 - [Prisma ORM](https://www.prisma.io/)
 - [Next JS](https://nextjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [React Query](https://tanstack.com/query/latest)
 
 ## Clone the repository
 
