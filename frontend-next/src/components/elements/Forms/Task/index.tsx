@@ -3,7 +3,7 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import { addTask, updateTask } from "@/queries/task";
+import { addTask, updateTask } from "@/repositories/task";
 import { TaskFormProps, TaskPayload } from "./types";
 
 const TaskForm = ({ close, categoryId, prevTask }: TaskFormProps) => {

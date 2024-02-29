@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { getCookie } from "cookies-next";
 import Swal from "sweetalert2";
-import { addCategory, deleteCategory, updateCategory } from "@/queries/category";
+import { addCategory, deleteCategory, updateCategory } from "@/repositories/category";
 import { CategoryFormProps, CategoryPayload } from "./types";
 
 const CategoryForm = ({ close, prevCategory }: CategoryFormProps) => {

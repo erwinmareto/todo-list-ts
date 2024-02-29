@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import TodosPage from "@/components/pages/Todos";
-import { getCategoriesByUserId } from "@/queries/category";
+import { getCategoriesByUserId } from "@/repositories/category";
 
 export default async function Home() {
   const cookieJar = cookies();

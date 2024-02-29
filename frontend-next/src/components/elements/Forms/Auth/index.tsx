@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { setCookie } from "cookies-next";
 import Swal from "sweetalert2";
-import { loginUser, registerUser } from "@/queries/auth";
+import { loginUser, registerUser } from "@/repositories/auth";
 import { AuthPayload, AuthFormProps } from "./types";
 
 const AuthForm = ({ authType }: AuthFormProps) => {

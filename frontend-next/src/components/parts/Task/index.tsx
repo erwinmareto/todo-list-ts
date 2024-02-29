@@ -9,7 +9,7 @@ import TaskForm from "@/components/elements/Forms/Task";
 import { Task } from "@/components/pages/Todos/types";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-import { deleteTask, updateTask } from "@/queries/task";
+import { deleteTask, updateTask } from "@/repositories/task";
 import ConfirmModal from "@/components/elements/Modal/Confirm";
 
 const Task = ({ task }: { task: Task }) => {

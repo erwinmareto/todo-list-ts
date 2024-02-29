@@ -7,7 +7,7 @@ import Task from "@/components/parts/Task";
 import NewTask from "@/components/parts/Add/NewTask";
 import CategoryForm from "@/components/elements/Forms/Category";
 import Modal from "@/components/elements/Modal";
-import { deleteCategory } from "@/queries/category";
+import { deleteCategory } from "@/repositories/category";
 import { Category } from "@/components/pages/Todos/types";
 import ConfirmModal from "@/components/elements/Modal/Confirm";
 
