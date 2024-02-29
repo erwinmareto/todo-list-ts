@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { getCookie } from "cookies-next";
 import Swal from "sweetalert2";
-import { addCategory, deleteCategory, updateCategory } from "@/queries/category";
+import { addCategory, updateCategory } from "@/repositories/category";
 import { CategoryFormProps, CategoryPayload } from "./types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const CategoryForm = ({ close, prevCategory }: CategoryFormProps) => {
   const userId = getCookie("userId");
   const router = useRouter();
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -19,35 +21,54 @@ const CategoryForm = ({ close, prevCategory }: CategoryFormProps) => {
       title: prevCategory?.title,
     },
   });
-  const onSubmit: SubmitHandler<CategoryPayload> = async (data) => {
-    try {
-      const payload = { ...data, userId };
-      const category = prevCategory
-        ? await updateCategory(prevCategory.id, payload)
-        : await addCategory(payload);
-      close();
 
+  const createCategoryMutation = useMutation({
+    mutationFn: addCategory,
+    onSuccess: () => {
       Swal.fire({
         title: "Success!",
-        text: category.message,
+        text: "Category created successfully!",
         icon: "success",
         timer: 2000,
         showCloseButton: false,
         showConfirmButton: false,
         timerProgressBar: true,
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+      });
+      close();
       router.refresh();
-    } catch (error: any) {
+    },
+  });
+
+  const updateCategoryMutation = useMutation({
+    mutationFn: updateCategory,
+    onSuccess: () => {
       Swal.fire({
-        title: "Error!",
-        text: error.message,
-        icon: "error",
+        title: "Success!",
+        text: "Category updated successfully!",
+        icon: "success",
         timer: 2000,
         showCloseButton: false,
         showConfirmButton: false,
         timerProgressBar: true,
       });
-    }
+
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+      });
+      close();
+      router.refresh();
+    },
+  });
+
+  const onSubmit: SubmitHandler<CategoryPayload> = async (data) => {
+    const payload = { ...data, userId };
+    prevCategory
+      ? updateCategoryMutation.mutate({ ...payload, id: prevCategory.id })
+      : createCategoryMutation.mutate(payload);
   };
 
   return (

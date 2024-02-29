@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/parts/Navbar";
 import { cookies } from "next/headers";
+import Providers from "@/components/parts/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,11 +19,14 @@ export default function RootLayout({
 }>) {
   const cookieJar = cookies();
   const token = cookieJar.get("token");
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar token={token} />
-        {children}
+        <Providers>
+          <Navbar token={token} />
+          {children}
+        </Providers>
       </body>
     </html>
   );

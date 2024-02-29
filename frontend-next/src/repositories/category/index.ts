@@ -18,9 +18,9 @@ const addCategory = async (payload: Record<string, unknown>) => {
   }
 };
 
-const updateCategory = async (id: number, payload: Record<string, unknown>) => {
+const updateCategory = async (payload: Record<string, unknown>) => {
   try {
-    const category = await fetcher(`/categories/${id}`, "PUT", payload);
+    const category = await fetcher(`/categories/${payload.id}`, "PUT", payload);
     return category;
   } catch (error) {
     throw error;

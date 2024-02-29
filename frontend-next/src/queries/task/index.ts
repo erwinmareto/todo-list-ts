@@ -1,30 +1,12 @@
-import { fetcher } from "@/lib/fetcher";
+import { useQuery } from "@tanstack/react-query";
+import { getCategoriesByUserId } from "@/repositories/category";
 
-const addTask = async (payload: Record<string, unknown>) => {
-  try {
-    const task = await fetcher("/tasks", "POST", payload);
-    return task;
-  } catch (error) {
-    throw error;
-  }
+export const getTaskKey = (userId: number) => ["tasks", userId];
+
+export const useTask = (userId: number) => {
+  const result = useQuery({
+    queryKey: getTaskKey(userId),
+    queryFn: () => getCategoriesByUserId(userId),
+  });
+  return result;
 };
-
-const updateTask = async (id: number, payload: Record<string, unknown>) => {
-  try {
-    const task = await fetcher(`/tasks/${id}`, "PUT", payload);
-    return task;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const deleteTask = async (id: number) => {
-  try {
-    const task = await fetcher(`/tasks/${id}`, "DELETE");
-    return task;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export { addTask, updateTask, deleteTask };
