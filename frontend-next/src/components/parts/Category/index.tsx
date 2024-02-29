@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import Task from "@/components/parts/Task";
 import NewTask from "@/components/parts/Add/NewTask";
@@ -10,9 +9,10 @@ import Modal from "@/components/elements/Modal";
 import { deleteCategory } from "@/repositories/category";
 import { Category } from "@/components/pages/Todos/types";
 import ConfirmModal from "@/components/elements/Modal/Confirm";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const CategoryCard = ({ category }: { category: Category }) => {
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [modal, setModal] = useState(false);
   const [confirm, setConfirm] = useState(false);
@@ -24,32 +24,27 @@ const CategoryCard = ({ category }: { category: Category }) => {
   };
   const changeConfirm = () => {
     setConfirm(!confirm);
-  }
+  };
 
-  const handleDelete = async () => {
-    try {
-      const deleted = await deleteCategory(category.id);
+  const deleteCategoryMutation = useMutation({
+    mutationFn: deleteCategory,
+    onSuccess: () => {
       Swal.fire({
         title: "Success!",
-        text: deleted.message,
+        text: "Category deleted successfully!",
         icon: "success",
         timer: 2000,
         showCloseButton: false,
         showConfirmButton: false,
         timerProgressBar: true,
       });
-      router.refresh();
-    } catch (error: any) {
-      Swal.fire({
-        title: "Error!",
-        text: error.message,
-        icon: "error",
-        timer: 2000,
-        showCloseButton: false,
-        showConfirmButton: false,
-        timerProgressBar: true,
-      });
-    }
+
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+
+  const handleDelete = () => {
+    deleteCategoryMutation.mutate(category.id);
   };
   return (
     <>
@@ -105,7 +100,11 @@ const CategoryCard = ({ category }: { category: Category }) => {
         </Modal>
       )}
       {confirm && (
-        <ConfirmModal close={changeConfirm} handleDelete={handleDelete} name={category?.title} />
+        <ConfirmModal
+          close={changeConfirm}
+          handleDelete={handleDelete}
+          name={category?.title}
+        />
       )}
     </>
   );

@@ -9,9 +9,9 @@ const addTask = async (payload: Record<string, unknown>) => {
   }
 };
 
-const updateTask = async (id: number, payload: Record<string, unknown>) => {
+const updateTask = async (payload: Record<string, unknown>) => {
   try {
-    const task = await fetcher(`/tasks/${id}`, "PUT", payload);
+    const task = await fetcher(`/tasks/${payload.id}`, "PUT", payload);
     return task;
   } catch (error) {
     throw error;

@@ -1,13 +1,13 @@
 "use client";
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { addTask, updateTask } from "@/repositories/task";
 import { TaskFormProps, TaskPayload } from "./types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const TaskForm = ({ close, categoryId, prevTask }: TaskFormProps) => {
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -18,35 +18,86 @@ const TaskForm = ({ close, categoryId, prevTask }: TaskFormProps) => {
       status: prevTask?.status,
       priority: prevTask?.priority,
       dueTime: prevTask?.dueTime,
-    }
+    },
   });
 
-  const onSubmit: SubmitHandler<TaskPayload> = async (data) => {
-    try {
-      const payload = {...data, categoryId};
-      const task = prevTask ? await updateTask(prevTask?.id, payload) : await addTask(payload);
-      close();
+  // const onSubmit: SubmitHandler<TaskPayload> = async (data) => {
+  //   try {
+  //     const payload = { ...data, categoryId };
+  //     const task = prevTask
+  //       ? await updateTask(prevTask?.id, payload)
+  //       : await addTask(payload);
+  //     close();
+  //     Swal.fire({
+  //       title: "Success!",
+  //       text: task.message,
+  //       icon: "success",
+  //       timer: 2000,
+  //       showCloseButton: false,
+  //       showConfirmButton: false,
+  //       timerProgressBar: true,
+  //     });
+  //     router.refresh();
+  //   } catch (error: any) {
+  //     Swal.fire({
+  //       title: "Error!",
+  //       text: error.message,
+  //       icon: "error",
+  //       timer: 2000,
+  //       showCloseButton: false,
+  //       showConfirmButton: false,
+  //       timerProgressBar: true,
+  //     });
+  //   }
+  // };
+
+  const createTaskMutation = useMutation({
+    mutationFn: addTask,
+    onSuccess: () => {
       Swal.fire({
         title: "Success!",
-        text: task.message,
+        text: "Task created successfully!",
         icon: "success",
         timer: 2000,
         showCloseButton: false,
         showConfirmButton: false,
         timerProgressBar: true,
-      })
-      router.refresh()
-    } catch (error: any) {
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+      });
+
+      close();
+    },
+  });
+
+  const updateTaskMutation = useMutation({
+    mutationFn: updateTask,
+    onSuccess: () => {
       Swal.fire({
-        title: "Error!",
-        text: error.message,
-        icon: "error",
+        title: "Success!",
+        text: "Task updated successfully!",
+        icon: "success",
         timer: 2000,
         showCloseButton: false,
         showConfirmButton: false,
         timerProgressBar: true,
       });
-    }
+
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+      });
+
+      close();
+    },
+  });
+
+  const onSubmit: SubmitHandler<TaskPayload> = async (data) => {
+    const payload = { ...data, categoryId };
+    prevTask
+      ? updateTaskMutation.mutate({ ...payload, id: prevTask.id })
+      : createTaskMutation.mutate(payload);
   };
   return (
     <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>

@@ -2,18 +2,18 @@
 
 import React, { useState } from "react";
 import moment from "moment";
+import Swal from "sweetalert2";
 import DeleteButton from "@/components/elements/Buttons/Delete";
 import EditButton from "@/components/elements/Buttons/Edit";
 import Modal from "@/components/elements/Modal";
 import TaskForm from "@/components/elements/Forms/Task";
 import { Task } from "@/components/pages/Todos/types";
-import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
-import { deleteTask, updateTask } from "@/repositories/task";
 import ConfirmModal from "@/components/elements/Modal/Confirm";
+import { deleteTask, updateTask } from "@/repositories/task";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const Task = ({ task }: { task: Task }) => {
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [modal, setModal] = useState(false);
   const [confirm, setConfirm] = useState(false);
@@ -43,64 +43,58 @@ const Task = ({ task }: { task: Task }) => {
     },
   });
 
+  const updateTaskMutation = useMutation({
+    mutationFn: updateTask,
+    onSuccess: () => {
+      Toast.fire({
+        icon: "success",
+        title: `"${task?.title}" updated successfully!`,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+      });
+    },
+  });
+
   const changeStatus = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      const { createdAt, updatedAt, ...payload } = task;
-      if (event.target.checked) {
-        payload.status = "DONE";
-        const updated = await updateTask(task?.id, payload);
-        Toast.fire({
-          icon: "success",
-          title: `"${task?.title}" marked as done`,
-        });
-        router.refresh();
-      } else {
-        payload.status = "STARTED";
-        const updated = await updateTask(task?.id, payload);
-        Toast.fire({
-          icon: "success",
-          title: `"${task?.title}" marked as started`,
-        });
-      }
-      router.refresh();
-    } catch (error: any) {
-      Swal.fire({
-        title: "Error!",
-        text: error.message,
-        icon: "error",
-        timer: 2000,
-        showCloseButton: false,
-        showConfirmButton: false,
-        timerProgressBar: true,
+    const { createdAt, updatedAt, ...payload } = task;
+    if (event.target.checked) {
+      payload.status = "DONE";
+      updateTaskMutation.mutate({
+        ...payload,
+        status: "DONE",
+      });
+    } else {
+      payload.status = "STARTED";
+      updateTaskMutation.mutate({
+        ...payload,
+        status: "STARTED",
       });
     }
   };
 
-  const handleDelete = async () => {
-    try {
-      const deleted = await deleteTask(task?.id);
+  const deleteTaskMutation = useMutation({
+    mutationFn: deleteTask,
+    onSuccess: () => {
       close();
       Swal.fire({
         title: "Success!",
-        text: deleted.message,
+        text: "Task deleted successfully!",
         icon: "success",
         timer: 2000,
         showCloseButton: false,
         showConfirmButton: false,
         timerProgressBar: true,
       });
-      router.refresh();
-    } catch (error: any) {
-      Swal.fire({
-        title: "Error!",
-        text: error.message,
-        icon: "error",
-        timer: 2000,
-        showCloseButton: false,
-        showConfirmButton: false,
-        timerProgressBar: true,
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
       });
-    }
+    },
+  });
+
+  const handleDelete = async () => {
+    deleteTaskMutation.mutate(task.id);
   };
   return (
     <>

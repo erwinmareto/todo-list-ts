@@ -13,6 +13,7 @@ import { setCookie } from "cookies-next";
 import Swal from "sweetalert2";
 import { loginUser, registerUser } from "@/repositories/auth";
 import { AuthPayload, AuthFormProps } from "./types";
+import { useMutation } from "@tanstack/react-query";
 
 const AuthForm = ({ authType }: AuthFormProps) => {
   const router = useRouter();
@@ -21,43 +22,46 @@ const AuthForm = ({ authType }: AuthFormProps) => {
     handleSubmit,
     formState: { errors },
   } = useForm<AuthPayload>();
-  const onSubmit: SubmitHandler<AuthPayload> = async (data) => {
-    try {
-      const userData =
-        authType === "register"
-          ? await registerUser(data)
-          : await loginUser(data);
+
+  const loginMutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: ({ data }) => {
       Swal.fire({
         title: "Success!",
-        text: userData.message,
+        text: "User logged in successfully!",
         icon: "success",
         timer: 2000,
         showCloseButton: false,
         showConfirmButton: false,
         timerProgressBar: true,
       });
-      // authType === "register" ? router.push("/auth/login") : router.push("/")
-      switch (authType) {
-        case "register":
-          router.push("/auth/login");
-          break;
-        case "login":
-          setCookie("token", userData.data.accessToken);
-          setCookie("userId", userData.data.id);
-          router.push("/");
-          break;
-      }
-    } catch (error: any) {
+
+      setCookie("token", data.accessToken);
+      setCookie("userId", data.id);
+      router.push("/");
+    },
+  });
+
+  const registerMutation = useMutation({
+    mutationFn: registerUser,
+    onSuccess: () => {
       Swal.fire({
-        title: "Error!",
-        text: error.message,
-        icon: "error",
+        title: "Success!",
+        text: "User registered successfully!",
+        icon: "success",
         timer: 2000,
         showCloseButton: false,
         showConfirmButton: false,
         timerProgressBar: true,
       });
-    }
+      router.push("/auth/login");
+    },
+  });
+
+  const onSubmit: SubmitHandler<AuthPayload> = async (data) => {
+    authType === "register"
+      ? registerMutation.mutate(data)
+      : loginMutation.mutate(data);
   };
   return (
     <>
